@@ -1,0 +1,316 @@
+/* Global reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Quicksand", sans-serif;
+}
+
+/* Base theme variables */
+:root {
+  /* Light theme (default) */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F9FAFB;
+  --text-primary: #111827;
+  --text-secondary: #4B5563;
+  --border-color: #E5E7EB;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --accent-color: #3B82F6;
+  --accent-hover: #2563EB;
+  --danger-color: #EF4444;
+  --danger-hover: #DC2626;
+  --menu-bg: rgba(255, 255, 255, 0.07);
+  --icon-bg: #0c0c0c;
+}
+
+/* Dark theme variables */
+body.dark {
+  --bg-primary: #1F2937;
+  --bg-secondary: #111827;
+  --text-primary: #F9FAFB;
+  --text-secondary: #D1D5DB;
+  --border-color: #374151;
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --accent-color: #60A5FA;
+  --accent-hover: #3B82F6;
+  --danger-color: #F87171;
+  --danger-hover: #EF4444;
+  --menu-bg: rgba(0, 0, 0, 0.3);
+  --icon-bg: #374151;
+}
+
+/* Body styling */
+body {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Text styling */
+h1, h3 {
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+p {
+  color: var(--text-secondary);
+}
+
+/* Sliding Menu Styles */
+.menu::-webkit-scrollbar {
+  display: none;
+}
+
+.menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 85px;
+  height: 100%;
+  transition: 0.3s;
+  scrollbar-width: none;
+  overflow: hidden scroll;
+  background: var(--menu-bg);
+  -ms-overflow-style: none;
+  padding: 20px 20px 20px 0;
+  backdrop-filter: blur(5px);
+  box-shadow: 8px 0px 9px 0px rgba(0, 0, 0, 0.08);
+}
+
+.menu:hover {
+  width: 260px;
+}
+
+.menu:hover li span:nth-child(2) {
+  display: block;
+}
+
+.menu-content {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-content li {
+  list-style: none;
+  border-radius: 0px 50px 50px 0;
+  transition: 0.3s;
+  margin-bottom: 20px;
+  padding-left: 20px;
+}
+
+.menu-content li:hover {
+  background: var(--accent-color);
+}
+
+.menu-content li span:nth-child(2) {
+  display: none;
+}
+
+.menu-content li a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-family: "calibri";
+  padding: 8px;
+  transition: all 0.3s ease;
+}
+
+.menu-content li a.active {
+  color: var(--bg-primary);
+}
+
+.menu-content li a.active .material-symbols-outlined {
+  background-color: var(--accent-color);
+}
+
+.material-symbols-outlined {
+  padding: 10px;
+  font-size: 25px;
+  margin-right: 10px;
+  border-radius: 50%;
+  background: var(--icon-bg);
+  transition: background-color 0.3s;
+}
+
+/* Navigation Bar */
+nav {
+  background-color: var(--bg-primary);
+  box-shadow: 0 2px 4px var(--shadow-color);
+  padding: 1rem;
+  margin-left: 85px;
+  transition: margin-left 0.3s;
+}
+
+.menu:hover + nav, .menu:hover ~ .max-w-7xl {
+  margin-left: 260px;
+}
+
+/* Main Content */
+.max-w-7xl {
+  margin-left: 85px;
+  padding: 2rem;
+  transition: margin-left 0.3s;
+}
+
+/* Form Styles */
+form {
+  background-color: var(--bg-primary);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  margin-bottom: 2rem;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+form label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+form input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+form input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+form button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: var(--accent-color);
+  color: white;
+  transition: background-color 0.3s;
+}
+
+form button:hover {
+  background-color: var(--accent-hover);
+}
+
+form button#cancel-edit-btn {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  margin-right: 1rem;
+}
+
+form button#cancel-edit-btn:hover {
+  background-color: var(--border-color);
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--bg-primary);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+thead {
+  background-color: var(--bg-secondary);
+}
+
+thead th {
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.3s;
+}
+
+tbody tr:hover {
+  background-color: var(--bg-secondary);
+}
+
+tbody td {
+  padding: 1rem;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+button.edit-btn,
+button.delete-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button.edit-btn {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+button.edit-btn:hover {
+  background-color: var(--accent-hover);
+}
+
+button.delete-btn {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+button.delete-btn:hover {
+  background-color: var(--danger-hover);
+}
+
+/* Card hover effects */
+.action-card {
+  transition: all 0.3s ease;
+}
+
+.action-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -2px var(--shadow-color);
+}
+
+/* Status indicators */
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+/* Stat cards */
+.stat-card {
+  transition: all 0.2s ease-in-out;
+}
+
+.stat-card:hover {
+  background-color: var(--bg-secondary);
+}
+
+/* Hidden class utility */
+.hidden {
+  display: none;
+}

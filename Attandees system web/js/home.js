@@ -846,3 +846,86 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+
+    // This script runs after everything else is loaded
+    setTimeout(function() {
+      console.log("EMERGENCY STATS UPDATE RUNNING");
+      
+      // Get direct references to the elements
+      const attendanceRate = document.getElementById('attendance-rate');
+      const absenceCount = document.getElementById('absence-count');
+      const lateCount = document.getElementById('late-count');
+      const earlyCount = document.getElementById('early-count');
+      
+      // Check if Firebase is accessible
+      if (typeof firebase === 'undefined') {
+        console.error("Firebase not found!");
+        return;
+      }
+      
+      // Get the current user
+      const user = firebase.auth().currentUser;
+      if (!user) {
+        console.log("No authenticated user found");
+        return;
+      }
+      
+      console.log("User authenticated:", user.uid);
+      
+      // DIRECT QUERY without any filters
+      firebase.firestore().collection('attendance')
+        .where('userId', '==', user.uid)
+        .get()
+        .then(function(snapshot) {
+          console.log("Found records:", snapshot.size);
+          
+          // Initialize counters
+          let totalClasses = snapshot.size;
+          let presentCount = 0;
+          let earlyCount = 0;
+          let lateCount = 0;
+          
+          // Process records
+          snapshot.forEach(function(doc) {
+            const data = doc.data();
+            console.log("Processing record:", doc.id);
+            
+            if (data.clockInTime) {
+              presentCount++;
+              
+              if (data.earlyLateStatus === 'early') {
+                earlyCount++;
+              } else if (data.earlyLateStatus === 'late') {
+                lateCount++;
+              }
+            }
+          });
+          
+          // Calculate stats
+          const absenceCount = totalClasses - presentCount;
+          const attendanceRate = totalClasses > 0 ? 
+            Math.round((presentCount / totalClasses) * 100) : 0;
+          
+          console.log("DIRECT UPDATE WITH:", {
+            attendanceRate, absenceCount, lateCount, earlyCount
+          });
+          
+          // DIRECTLY OVERRIDE the HTML content
+          document.getElementById('attendance-rate').innerHTML = `${attendanceRate}%`;
+          document.getElementById('absence-count').innerHTML = `${absenceCount}`;
+          document.getElementById('late-count').innerHTML = `${lateCount}`;
+          document.getElementById('early-count').innerHTML = `${earlyCount}`;
+          
+          // Force a style change to make it obvious the update happened
+          document.getElementById('attendance-rate').style.color = '#059669';
+          document.getElementById('absence-count').style.color = '#DC2626';
+          document.getElementById('late-count').style.color = '#D97706';
+          document.getElementById('early-count').style.color = '#2563EB';
+          
+          console.log("✅ EMERGENCY UPDATE SUCCESSFUL");
+        })
+        .catch(function(error) {
+          console.error("Emergency update failed:", error);
+        });
+    },1000); // Wait 1 seconds to ensure everything is loaded
+ 

@@ -3,19 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <title>Login</title>
-    <link rel="stylesheet" href="./style.css" />
-    <link rel="icon" type="image/x-icon" href="fst.png" />
+    <link rel="stylesheet" href="..\css\style.css" />
+    <link rel="icon" type="image/x-icon" href="..\src\fst.png" />
     <!-- GSAP and MorphSVG for Password Reveal Animation -->
     <script src="https://assets.codepen.io/16327/MorphSVGPlugin3.min.js"></script>
     <script src="https://assets.codepen.io/16327/ScrambleTextPlugin3.min.js"></script>
     <script src="https://unpkg.com/gsap@3.11.0/dist/gsap.min.js"></script>
-    
+
     <!-- Add Firebase compat libraries -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
-    
+
     <!-- Initialize Firebase compat -->
     <script>
       // Firebase configuration
@@ -27,9 +27,9 @@
         storageBucket: "fdhf-4403b.appspot.com",
         messagingSenderId: "805654928789",
         appId: "1:805654928789:web:c7d541db0c1f92196e2a9c",
-        measurementId: "G-KZNZ6JQ4FL"
+        measurementId: "G-KZNZ6JQ4FL",
       };
-      
+
       // Initialize Firebase with compat API
       firebase.initializeApp(firebaseConfig);
     </script>
@@ -172,9 +172,6 @@
       <span></span>
       <span></span>
 
-
-      
-
       <div class="signin">
         <div class="content">
           <h2>Sign In</h2>
@@ -214,8 +211,8 @@
                       />
                     </mask>
                   </defs>
-                  <path/>
-                  
+                  <path />
+
                   <path
                     class="lid lid--lower"
                     d="M1 12C1 12 5 20 12 20C19 20 23 12 23 12"
@@ -235,7 +232,7 @@
             </div>
             <div class="links">
               <a href="#" id="forgot-password">Forgot Password</a>
-              <a href="signup.html">Signup</a>
+              <a href="..\html\signup.html">Signup</a>
             </div>
             <div class="inputBox">
               <input type="submit" value="Login" id="login-btn" />
@@ -245,8 +242,9 @@
       </div>
     </section>
 
-    <!-- JavaScript for Firebase and Notifications -->
-    <script src="base.js"></script>
-    <script src="./script.js" type="module"></script>
+    <script src="..\js\base.js"></script>
+    <script src="..\js\script.js" type="module"></script>
+    <script src="..\js\password-reveal.js" type="module"></script>
+    <script src="..\js\profile.js" ></script>
   </body>
 </html>
