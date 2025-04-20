@@ -846,6 +846,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+
     // This script runs after everything else is loaded
     setTimeout(function() {
       console.log("EMERGENCY STATS UPDATE RUNNING");
