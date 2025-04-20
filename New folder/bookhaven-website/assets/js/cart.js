@@ -166,14 +166,14 @@ class ShoppingCart {
               <p class="text-muted mb-2">${item.author}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center">
-                  <span class="me-3 fw-bold">${item.price.toFixed(2)} D</span>
+                    <span class="me-3 fw-bold">${item.price.toFixed(2)} TND</span>
                   <div class="input-group input-group-sm" style="width: 120px;">
                     <button class="btn btn-outline-secondary decrease-qty" type="button">-</button>
                     <input type="number" class="form-control text-center item-qty" value="${item.quantity}" min="1" max="10">
                     <button class="btn btn-outline-secondary increase-qty" type="button">+</button>
                   </div>
                 </div>
-                <div class="fw-bold item-total">${(item.price * item.quantity).toFixed(2)} D</div>
+                <div class="fw-bold item-total">${(item.price * item.quantity).toFixed(2)} TND</div>
               </div>
             </div>
           </div>
@@ -189,9 +189,9 @@ class ShoppingCart {
       });
       
       // Update totals
-      if (subtotalElement) subtotalElement.textContent = this.getSubtotal().toFixed(2) + ' D';
-      if (taxElement) taxElement.textContent = this.getTax().toFixed(2) + ' D';
-      if (totalElement) totalElement.textContent = this.getTotal().toFixed(2) + ' D';
+      if (subtotalElement) subtotalElement.textContent = this.getSubtotal().toFixed(2) + ' TND';
+      if (taxElement) taxElement.textContent = this.getTax().toFixed(2) + ' TND';
+      if (totalElement) totalElement.textContent = this.getTotal().toFixed(2) + ' TND';
       if (cartCountDisplay) cartCountDisplay.textContent = this.getItemCount();
       
       // Add event listeners
@@ -282,7 +282,7 @@ class ShoppingCart {
       
       const totalElement = cartItem.querySelector('.item-total');
       if (totalElement) {
-        totalElement.textContent = (item.price * item.quantity).toFixed(2) + ' D';
+        totalElement.textContent = (item.price * item.quantity).toFixed(2) + ' TND';
       }
       
       // Update order summary
@@ -290,9 +290,9 @@ class ShoppingCart {
       const taxElement = document.getElementById('tax');
       const orderTotalElement = document.getElementById('total'); // Renamed from 'totalElement'
       
-      if (subtotalElement) subtotalElement.textContent = this.getSubtotal().toFixed(2) + ' D';
-      if (taxElement) taxElement.textContent = this.getTax().toFixed(2) + ' D';
-      if (orderTotalElement) orderTotalElement.textContent = this.getTotal().toFixed(2) + ' D';
+      if (subtotalElement) subtotalElement.textContent = this.getSubtotal().toFixed(2) + ' TND';
+      if (taxElement) taxElement.textContent = this.getTax().toFixed(2) + ' TND';
+      if (orderTotalElement) orderTotalElement.textContent = this.getTotal().toFixed(2) + ' TND';
     }
   }
   

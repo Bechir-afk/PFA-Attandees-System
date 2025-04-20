@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         priceRangeInput.addEventListener('input', function() {
             currentPriceRange = parseInt(this.value);
             if (priceValueDisplay) {
-                priceValueDisplay.textContent = currentPriceRange + ' D';
+                priceValueDisplay.textContent = currentPriceRange + ' TND';
             }
             applyFiltersAndSort();
         });
@@ -216,6 +216,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Price range value display initialization
     if (priceRangeInput && priceValueDisplay) {
-        priceValueDisplay.textContent = priceRangeInput.value + ' D';
+        priceValueDisplay.textContent = priceRangeInput.value + ' TND';
     }
 });
