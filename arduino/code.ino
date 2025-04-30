@@ -37,8 +37,8 @@ bool isAdmin(String uid);
 #define SCK_PIN 18
 
 // WiFi credentials
-const char* ssid = "Home";
-const char* password = "21277855aZe**";
+const char* ssid = "test";
+const char* password = "test12345";
 
 // Firebase Details
 const char* FIREBASE_HOST = "fdhf-4403b-default-rtdb.firebaseio.com";
