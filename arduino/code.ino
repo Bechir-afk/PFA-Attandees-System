@@ -120,10 +120,10 @@ void loop() {
   }
   
   // Add timeout handling
-  if (currentState == PROCESSING_CARD && (millis() - stateTime > 6000)) { // CHANGED FROM 10000 to 6000ms
+  if (currentState == PROCESSING_CARD && (millis() - stateTime > 10000)) {
     lcd.clear();
     lcd.print("Timeout!");
-    delay(500); // CHANGED FROM 1000 to 500ms
+    delay(1000);
     lcd.clear();
     lcd.print("Scan your card");
     currentState = READY_FOR_SCAN;
@@ -181,7 +181,7 @@ void connectToWiFi() {
     lcd.clear();
     lcd.print("WiFi Connected");
     wifiConnected = true;
-    delay(1000);
+    delay(2000);
     lcd.clear();
     lcd.print("Scan your card");
     currentState = READY_FOR_SCAN;
@@ -198,7 +198,7 @@ void connectToWiFi() {
 void handleRFIDScan() {
   static unsigned long lastScanTime = 0;
   
-  if (millis() - lastScanTime < 1500) return; // CHANGED FROM 3000 to 1500ms
+  if (millis() - lastScanTime < 3000) return;
   
   // Check if card is present
   if (rfid.PICC_IsNewCardPresent() && rfid.PICC_ReadCardSerial()) {
@@ -256,10 +256,10 @@ void checkFirebaseResponse() {
     bool isClockOut = checkAlreadyClockedIn(currentUID);
     
     if (isClockOut) {
-      // User is clocked in, so now clocking out
       lcd.clear();
       lcd.print("Goodbye");
       lcd.setCursor(0, 1);
+      // Add Mr for admins when clocking out too
       if (isUserAdmin) {
         lcd.print("Mr " + userName);
       } else {
@@ -269,10 +269,10 @@ void checkFirebaseResponse() {
       beep(2);
       recordAttendance(currentUID, userName, false);
     } else {
-      // User is clocked out or first time, so clocking in
       lcd.clear();
       lcd.print("Welcome");
       lcd.setCursor(0, 1);
+      // Add Mr prefix for admin users
       if (isUserAdmin) {
         lcd.print("Mr " + userName);
       } else {
@@ -282,18 +282,12 @@ void checkFirebaseResponse() {
       beep(1);
       recordAttendance(currentUID, userName, true);
     }
-
-    // Add debug info
-    Serial.print("User: ");
-    Serial.print(userName);
-    Serial.print(" - Status after operation: ");
-    Serial.println(isClockOut ? "Now clocked OUT" : "Now clocked IN");
   }
 
-  delay(500); // CHANGED FROM 1000 to 500ms for faster processing
+  delay(2000);
   lcd.clear();
   lcd.print("Scan your card");
-  setLED(0, 1, 0);
+  setLED(0, 1, 0); // Solid green after processing
   currentState = READY_FOR_SCAN;
 }
 
@@ -320,7 +314,7 @@ bool makeFirebaseRequest(HTTPClient &http, String &url, String &response, bool i
   
   client->setInsecure();
   http.begin(*client, url);
-  http.setTimeout(3000); // CHANGED FROM 5000 to 3000ms
+  http.setTimeout(5000);
   http.addHeader("Content-Type", "application/json");
   
   int httpCode = isGet ? http.GET() : http.POST(postData);
@@ -356,48 +350,15 @@ String getUserNameFromFirebase(String uid) {
 bool checkAlreadyClockedIn(String uid) {
   if (WiFi.status() != WL_CONNECTED) return false;
   
-  static String lastCheckedUID = "";
-  static unsigned long lastCheckTime = 0;
-  static bool lastCheckResult = false;
-  
-  // Cache check results for 5 seconds to avoid repeated Firebase queries
-  if (uid == lastCheckedUID && (millis() - lastCheckTime < 5000)) {
-    return lastCheckResult;
-  }
-  
   HTTPClient http;
   String date = getCurrentDate();
   String url = "https://" + String(FIREBASE_HOST) + "/attendance/" + date + "/" + uid + ".json";
   
   String response;
   if (makeFirebaseRequest(http, url, response)) {
-    Serial.print("Clock status response: ");
-    Serial.println(response);
-    
-    // Parse the JSON response to check status more accurately
-    DynamicJsonDocument doc(1024);
-    DeserializationError error = deserializeJson(doc, response);
-    
-    if (!error && !doc.isNull()) {
-      // Check if clockIn exists but clockOut doesn't
-      bool hasClockIn = doc.containsKey("clockIn");
-      bool hasClockOut = doc.containsKey("clockOut");
-      
-      Serial.print("Has clockIn: ");
-      Serial.print(hasClockIn ? "YES" : "NO");
-      Serial.print(", Has clockOut: ");
-      Serial.println(hasClockOut ? "YES" : "NO");
-      
-      // The key logic: if they have both clockIn AND clockOut, 
-      // they're considered NOT clocked in (ready to clock in again)
-      lastCheckedUID = uid;
-      lastCheckTime = millis();
-      lastCheckResult = hasClockIn && !hasClockOut;
-      
-      return lastCheckResult;
-    }
+    return (response != "null" && response.indexOf("clockIn") > 0 && 
+           response.indexOf("clockOut") == -1);
   }
-  // If no data exists or communication error, consider not clocked in
   return false;
 }
 
@@ -408,28 +369,18 @@ void recordAttendance(String uid, String userName, bool isClockIn) {
   String date = getCurrentDate();
   String url = "https://" + String(FIREBASE_HOST) + "/attendance/" + date + "/" + uid + ".json";
   
-  String response; // Add this missing declaration
   String timestamp = String(millis());
   String jsonData;
   
   if (isClockIn) {
-    // Fix: The clockIn timestamp should be a value, not another date string
     jsonData = "{\"name\":\"" + userName + "\",\"clockIn\":" + timestamp + "}";
-    // Use PUT for clocking in (creates new entry)
-    makeFirebaseRequest(http, url, response, false, jsonData);
   } else {
-    // For clockOut, use PATCH to update existing record
     jsonData = "{\"clockOut\":" + timestamp + "}";
-    // Add PATCH method for updating
-    http.addHeader("X-HTTP-Method-Override", "PATCH");
-    bool success = makeFirebaseRequest(http, url, response, false, jsonData);
-    
-    // Add debug info to confirm clock-out was recorded
-    Serial.print("Clock out success: ");
-    Serial.println(success ? "YES" : "NO");
-    Serial.print("Response: ");
-    Serial.println(response);
+    url += "?x-http-method-override=PATCH";
   }
+  
+  String response;
+  makeFirebaseRequest(http, url, response, !isClockIn, jsonData);
   
   updateLatestScan(uid, userName, isClockIn);
 }
