@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
               // Redirect based on role
               if (role === "admin") {
-                window.location.href = "../html/admin.html";
+                window.location.href = "../html/home.html";
               } else if (role === "teacher") {
                 window.location.href = "../html/dashboard.html";
               } else {
@@ -104,9 +104,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (userData.role === "student") {
                   window.location.href = "../html/home.html";
                 } else if (userData.role === "admin") {
-                  window.location.href = "../html/admin.html";
+                  window.location.href = "../html/home.html";
                 } else if (userData.role === "teacher") {
-                  window.location.href = "../html/dashboard.html";
+                  window.location.href = "../html/home.html";
                 } else {
                   window.location.href = "../html/home.html";  // Default fallback
                 }
